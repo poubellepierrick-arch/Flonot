@@ -1,0 +1,6 @@
+{
+  "name": "FlowNote",
+  "description": "Espace de travail modulaire et atelier d'improvisation : pages, bases de données, préparation de séances, chronologie, statistiques et synchronisation Firebase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

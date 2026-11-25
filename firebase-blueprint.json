@@ -1,0 +1,452 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Profil utilisateur et préférences d'affichage",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Identifiant Firebase Auth"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Nom affiché"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200,
+          "description": "Adresse email"
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "URL avatar"
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["light", "dark"],
+          "maxLength": 10,
+          "description": "Thème actif"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Horodatage serveur de mise à jour"
+        }
+      },
+      "required": ["uid", "theme", "updatedAt"]
+    },
+    "Workspace": {
+      "title": "Workspace",
+      "description": "Espace de travail personnel synchronisé",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "ownerId", "name", "createdAt", "updatedAt"]
+    },
+    "WorkspacePage": {
+      "title": "WorkspacePage",
+      "description": "Page document ou base de données dans l'espace de travail",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "parentId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "icon": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "type": {
+          "type": "string",
+          "enum": ["document", "database"],
+          "maxLength": 20
+        },
+        "isFavorite": {
+          "type": "boolean"
+        },
+        "isTrashed": {
+          "type": "boolean"
+        },
+        "order": {
+          "type": "number"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["native", "notion_import"],
+          "maxLength": 30
+        },
+        "blocks": {
+          "type": "array",
+          "description": "Liste bornée de blocs de contenu (max 400, incluant table, bookmark, youtube et audio)"
+        },
+        "columns": {
+          "type": "array",
+          "description": "Colonnes de base de données (max 100, incluant multi_select, relation, rollup et formula)"
+        },
+        "activeView": {
+          "type": "string",
+          "enum": ["table", "kanban", "list"],
+          "maxLength": 20
+        },
+        "sortRules": {
+          "type": "array",
+          "description": "Règles de tri par priorité des colonnes (max 30)"
+        },
+        "columnWidths": {
+          "type": "object",
+          "description": "Largeurs personnalisées des colonnes en pixels (max 100)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "title",
+        "type",
+        "isFavorite",
+        "isTrashed",
+        "order",
+        "source",
+        "blocks",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DatabaseRow": {
+      "title": "DatabaseRow",
+      "description": "Ligne d'une base de données",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "pageId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "order": {
+          "type": "number"
+        },
+        "cells": {
+          "type": "object",
+          "description": "Valeurs indexées par identifiant de colonne (max 100 propriétés)"
+        },
+        "linkedPageId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Identifiant optionnel de la fiche détaillée liée à cette ligne"
+        },
+        "blocks": {
+          "type": "array",
+          "description": "Blocs de contenu intégrés directement dans la fiche de la ligne (max 400)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "Commentaires et notes rapides affichés dans la section Discussions de la fiche (max 100)"
+        },
+        "notionPageId": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-fA-F0-9\\-]+$",
+          "description": "Identifiant UUID de la page Notion liée à cette fiche"
+        },
+        "notionSyncedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Horodatage ISO de la dernière synchronisation avec Notion"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "pageId",
+        "workspaceId",
+        "ownerId",
+        "order",
+        "cells",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ExploreThread": {
+      "title": "ExploreThread",
+      "description": "Fil de discussion du conseiller IA Explore synchronisé dans l'espace de travail",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "groupId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "thematique": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "modelId": {
+          "type": "string",
+          "enum": ["gemini-4-hydrogen", "gemini-3.1-flash-lite"],
+          "maxLength": 40
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["standard", "plan", "max"],
+          "maxLength": 20
+        },
+        "useWebSearch": {
+          "type": "boolean"
+        },
+        "messages": {
+          "type": "array",
+          "description": "Historique borné des messages du conseiller Explore (max 60)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "title",
+        "modelId",
+        "tier",
+        "useWebSearch",
+        "messages",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ViewSetting": {
+      "title": "ViewSetting",
+      "description": "Derniers réglages sauvegardés d'une page ou vue de l'espace de travail (filtres, brouillon Préparer, ordre de colonnes, navigation)",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["nav", "database", "prepare", "timeline", "stats", "explore", "search", "table_orders"],
+          "maxLength": 32
+        },
+        "settings": {
+          "type": "object",
+          "description": "Paramètres natifs bornés de la page ou de la vue (max 40 clés)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "workspaceId", "ownerId", "kind", "settings", "createdAt", "updatedAt"]
+    },
+    "SharedEmbed": {
+      "title": "SharedEmbed",
+      "description": "Instantané synchronisé en lecture seule du tableau Exercices accessible par jeton secret pour les embeds externes",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 24,
+          "maxLength": 128,
+          "pattern": "^emb_[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "target": {
+          "type": "string",
+          "enum": ["exercices"],
+          "maxLength": 20
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "pages": {
+          "type": "array",
+          "description": "Métadonnées des bases Impro (Exercices, Séances, Groupes, Participants)"
+        },
+        "rowsByPage": {
+          "type": "object",
+          "description": "Lignes natives indexées par page Impro pour le rendu et le tri de l'embed"
+        },
+        "tableOrders": {
+          "type": "object",
+          "description": "Ordre personnalisé des colonnes pour la vue embed"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "target",
+        "active",
+        "pages",
+        "rowsByPage",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Profil privé de l'utilisateur authentifié"
+    },
+    "/sharedEmbeds/{embedToken}": {
+      "schema": { "$ref": "#/entities/SharedEmbed" },
+      "description": "Miroirs synchronisés par jeton secret pour les intégrations embed du tableau Exercices"
+    },
+    "/workspaces/{workspaceId}": {
+      "schema": { "$ref": "#/entities/Workspace" },
+      "description": "Espace de travail appartenant à un utilisateur"
+    },
+    "/workspaces/{workspaceId}/pages/{pageId}": {
+      "schema": { "$ref": "#/entities/WorkspacePage" },
+      "description": "Pages et bases de données d'un espace de travail"
+    },
+    "/workspaces/{workspaceId}/pages/{pageId}/rows/{rowId}": {
+      "schema": { "$ref": "#/entities/DatabaseRow" },
+      "description": "Lignes des bases de données"
+    },
+    "/workspaces/{workspaceId}/exploreThreads/{threadId}": {
+      "schema": { "$ref": "#/entities/ExploreThread" },
+      "description": "Fils de discussion du conseiller IA Explore"
+    },
+    "/workspaces/{workspaceId}/viewSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/ViewSetting" },
+      "description": "Réglages persistants par page et par vue"
+    }
+  }
+}
